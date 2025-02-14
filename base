@@ -1,0 +1,31 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from collections import Counter
+
+# Data (Replace this with actual CSV reading if necessary)
+data = {
+    "Year": [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015],  # Example Years
+    "Real_AL_Winner": ["Judge", "Ohtani", "Judge", "Ohtani", "Abreu", "Trout", "Betts", "Altuve", "Trout", "Donaldson"],
+    "My_AL_Winner": ["Judge", "Ohtani", "Judge", "Ohtani", "Bieber", "Trout", "Betts", "Judge", "Trout", "Trout"],
+    "Real_NL_Winner": ["Ohtani", "Acuna", "Goldschmidt", "Harper", "Freeman", "Bellinger", "Yelich", "Stanton", "Bryant", "Harper"],
+    "My_NL_Winner": ["Ohtani", "Acuna", "Alcantara", "Tatis Jr", "Freeman", "Yelich", "deGrom", "Stanton", "Arenado", "Harper"]
+}
+
+df = pd.DataFrame(data)
+
+# Flatten and count occurrences
+all_winners = list(df["Real_AL_Winner"]) + list(df["My_AL_Winner"]) + list(df["Real_NL_Winner"]) + list(df["My_NL_Winner"])
+winner_counts = Counter(all_winners)
+
+# Convert to DataFrame for visualization
+winner_df = pd.DataFrame(winner_counts.items(), columns=["Player", "Count"])
+winner_df = winner_df.sort_values(by="Count", ascending=False).head(15)  # Top 15 winners
+
+# Plot
+plt.figure(figsize=(12, 6))
+sns.barplot(data=winner_df, x="Count", y="Player", palette="viridis")
+plt.xlabel("Number of MVP Selections")
+plt.ylabel("Player")
+plt.title("Most Frequent MVP Selections (Real & My Picks)")
+plt.show()
